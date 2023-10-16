@@ -7,60 +7,21 @@
 # - подписка на человека
 # - отписка
 
-
 # на будущее
 # - удаление поста
 # - удаление комментария
 
-openapi: 3.0.0
+swagger: "2.0"
 info:
   title: SocialChirp
+  description: "Twitter type application"
   version: 1.0.0
-components:
-  schemas:
-    Chirp:
-      type: object
-      properties:
-        content:
-          type: string
-        comments_count:
-          type: string
-        rechirps_count:
-          type: string
-        user:
-          type: object
-          properties:
-            id:
-              type: string
-            fullName:
-              type: string
-        created_at:
-          type: string
-          format: date
-    Comment:
-      type: object
-      properties:
-        content:
-          type: string
-        user:
-          type: object
-          properties:
-            id:
-              type: string
-            fullName:
-              type: string
-        created_at:
-          type: string
-          format: date
-    Subscriber:
-      type: object
-      properties:
-        id:
-            type: string
-        fullName:
-              type: string
-        age:
-              type: number
+consumes:
+  - application/io.goswagger.examples.todo-list.v1+json
+produces:
+  - application/io.goswagger.examples.todo-list.v1+json
+schemes:
+  - http
 paths:
   /chirps:
     post:
@@ -70,28 +31,24 @@ paths:
           in: header
           description: JWT Authorization Token
           required: true
-          schema:
-            type: string
+          type: string
         - name: content
           in: body
           description: Chirp content
           required: true
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  content:
-                    type: string
+          schema:
+            type: object
+            properties:
+              content:
+                type: string
       responses:
-        '201':
+        "201":
           description: Chirp created successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
 
-  /chirps:
     get:
       summary: Get a list of chirps
       parameters:
@@ -99,21 +56,18 @@ paths:
           in: header
           description: JWT Authorization Token
           required: true
-          schema:
-            type: string
+          type: string
       responses:
-        '200':
+        "200":
           description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Chirp'
-        '401':
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Chirp"
+        "401":
           description: Unauthorized
 
-    /comments:
+  /comments:
     post:
       summary: Create a new comment
       parameters:
@@ -121,8 +75,7 @@ paths:
           in: header
           description: JWT Authorization Token
           required: true
-          schema:
-            type: string
+          type: string
       requestBody:
         required: true
         content:
@@ -141,14 +94,13 @@ paths:
                 content:
                   type: string
       responses:
-        '201':
+        "201":
           description: Comment created successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
 
-    /comments:
     get:
       summary: Get comments for chirp
       parameters:
@@ -156,8 +108,7 @@ paths:
           in: header
           description: JWT Authorization Token
           required: true
-          schema:
-            type: string
+          type: string
       requestBody:
         required: true
         content:
@@ -170,18 +121,16 @@ paths:
                 chirp_id:
                   type: string
       responses:
-        '200':
+        "200":
           description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Comment'
-        '401':
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Comment"
+        "401":
           description: Unauthorized
 
-    /rechirp:
+  /rechirp:
     post:
       summary: Do repost
       parameters:
@@ -189,8 +138,7 @@ paths:
           in: header
           description: JWT Authorization Token
           required: true
-          schema:
-            type: string
+          type: string
       requestBody:
         required: true
         content:
@@ -206,14 +154,14 @@ paths:
                 user_id:
                   type: string
       responses:
-        '201':
+        "201":
           description: Rechirp created successfully
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-    
-    /subscribers:
+
+  /subscribers:
     get:
       summary: Get a list of subscribers
       parameters:
@@ -221,29 +169,26 @@ paths:
           in: header
           description: JWT Authorization Token
           required: true
-          schema:
-            type: string
+          type: string
       responses:
-        '200':
+        "200":
           description: Successful response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Subscriber'
-        '401':
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Subscriber"
+        "401":
           description: Unauthorized
-    /subscribe:
+
+  /subscribe:
     post:
-      summary: Subscribe to person
+      summary: Subscribe to a person
       parameters:
         - name: Authorization
           in: header
           description: JWT Authorization Token
           required: true
-          schema:
-            type: string
+          type: string
       requestBody:
         required: true
         content:
@@ -259,22 +204,22 @@ paths:
                 user_id:
                   type: string
       responses:
-        '201':
+        "201":
           description: Subscription was successful
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
-    /unsubscribe:
+
+  /unsubscribe:
     post:
-      summary: Unsubscribe from person
+      summary: Unsubscribe from a person
       parameters:
         - name: Authorization
           in: header
           description: JWT Authorization Token
           required: true
-          schema:
-            type: string
+          type: string
       requestBody:
         required: true
         content:
@@ -290,11 +235,84 @@ paths:
                 user_id:
                   type: string
       responses:
-        '201':
+        "201":
           description: Unsubscription was successful
-        '400':
+        "400":
           description: Bad request
-        '401':
+        "401":
           description: Unauthorized
+definitions:
+  Chirp:
+    type: object
+    description: A Chirp represents a post on SocialChirp.
+    properties:
+      content:
+        type: string
+        description: The content of the chirp
+      comments_count:
+        type: string
+        description: The number of comments on the chirp
+      rechirps_count:
+        type: string
+        description: The number of rechirps (reposts) of the chirp
+      user:
+        $ref: "#/definitions/User"
+      created_at:
+        type: string
+        format: date
+        description: The date and time when the chirp was created
+    example:
+      content: "This is a sample chirp."
+      comments_count: "5"
+      rechirps_count: "10"
+      user:
+        id: "123"
+        fullName: "John Doe"
+      created_at: "2023-10-16T12:34:56Z"
 
+  Comment:
+    type: object
+    description: A Comment represents a comment on a chirp.
+    properties:
+      content:
+        type: string
+        description: The content of the comment
+      user:
+        $ref: "#/definitions/User"
+      created_at:
+        type: string
+        format: date
+        description: The date and time when the comment was created
+    example:
+      content: "This is a sample comment."
+      user:
+        id: "456"
+        fullName: "Jane Smith"
+      created_at: "2023-10-17T13:45:00Z"
 
+  Subscriber:
+    type: object
+    description: A Subscriber represents a user following another user.
+    properties:
+      id:
+        type: string
+      fullName:
+        type: string
+      age:
+        type: number
+    example:
+      id: "789"
+      fullName: "Alice Johnson"
+      age: 30
+
+  User:
+    type: object
+    description: A User represents a registered user of SocialChirp.
+    properties:
+      id:
+        type: string
+      fullName:
+        type: string
+    example:
+      id: "123"
+      fullName: "John Doe"
